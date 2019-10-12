@@ -12,20 +12,25 @@ exports.gitHubList= async ({body}, res, next)=>{
             console.log(error)
           });
 
+        //We want to know the number of events that the user has
         let events = response[0].data
         let eventsNumber = events.reduce((a, obj) => a + Object.keys(obj).length, 0)
         
+        //If the number is more than 5 then we need only show the firts five
         if(eventsNumber > 5){
             events = events.slice(0, 5)
         }
 
+        //We want to know the number of gists that the user has
         let gists = response[1].data
         let gistsNumber = gists.reduce((a, obj) => a + Object.keys(obj).length, 0)
 
+        //If the number of gists is greater than 3 then we need only to show the firts three
         if(gistsNumber > 3){
             gists = gists.slice(0, 3)
         }
 
+        //In this seccion we create the User object for the response and store the data on the database
         let userObject = {
             username: username,
             events: events,
