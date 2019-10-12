@@ -1,5 +1,5 @@
 const axios = require('axios')
-
+const userModel = require('../models/user')
 
 //Endpoint to list Github users with events and gists
 exports.gitHubList= async ({body}, res, next)=>{
@@ -39,6 +39,9 @@ exports.gitHubList= async ({body}, res, next)=>{
            return res.status(400).json({error: error})
         } 
         responseArray.push(userObject)
+        let user = new userModel(userObject).save().catch(error => {
+            return res.status(400).json({error: error})
+          });
     }
     return res.status(200).json(responseArray);
 }
