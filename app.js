@@ -9,6 +9,21 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+//Database configuration
+const mongoose = require("mongoose");
+const dbPath = "mongodb://root:bdatos1@ds233268.mlab.com:33268/seventest";
+mongoose.connect(dbPath, {
+  useNewUrlParser: true,
+});
+const db = mongoose.connection;
+db.on("error", () => {
+    console.log("> error occurred from the database");
+});
+db.once("open", () => {
+    console.log("> successfully opened the database");
+});
+module.exports = mongoose;
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
