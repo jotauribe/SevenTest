@@ -1,10 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var users = require('../controllers/user');
+const express = require('express');
+const users = require('../controllers/user');
 
+const router = express.Router();
 
-router.post('/',
-users.gitHubList
-);
+router.post('/', users.gitHubList);
 
 module.exports = router;
