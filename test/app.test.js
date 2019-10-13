@@ -19,14 +19,12 @@ describe('Api Test', () => {
   it('handle successful response from api', async () => {
     axiosGetStub.returns([fakeData.githubResponse]);
 
-    const server = await app.start();
-    const response = await request(server)
+    const response = await request(app)
       .post('/github_users')
       .send({
         usernames: ['Timer']
       })
       .expect(200);
-    await app.stop();
 
     expect(response).toBe([fakeData.expectedResponse]);
   });

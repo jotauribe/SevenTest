@@ -4,27 +4,27 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-var debug = require('debug')('mysevenapp:server');
-var http = require('http');
+const debug = require('debug')('mysevenapp:server');
+const http = require('http');
 
-var appModule = require('../app');
+const app = require('../app');
+const database = require('../database');
 
 async function run() {
-  const server = await appModule.start();
+  await database.connect();
 
   /**
    * Get port from environment and store in Express.
    */
 
   var port = normalizePort(process.env.PORT || '3000');
-  server.set('port', port);
+  app.set('port', port);
 
   /**
    * Create HTTP server.
    */
 
-  var server = http.createServer(server);
+  var server = http.createServer(app);
 
   /**
    * Listen on provided port, on all network interfaces.

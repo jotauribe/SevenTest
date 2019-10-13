@@ -6,40 +6,26 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
 const usersRouter = require('./routes/users');
-const database = require('./database');
-const server = express();
+const app = express();
 
-async function start() {
-  await database.connect();
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(logger('dev'));
 
-  server.use(cors());
-  server.use(bodyParser.json());
-  server.use(bodyParser.urlencoded({ extended: true }));
-  server.use(cookieParser());
-  server.use(logger('dev'));
+app.use('/github_users', usersRouter);
 
-  server.use('/github_users', usersRouter);
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404));
+});
 
-  // catch 404 and forward to error handler
-  server.use(function(req, res, next) {
-    next(createError(404));
-  });
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+});
 
-  // error handler
-  server.use(function(err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
-  });
-
-  // Closing connection on process termination
-  process.on('SIGINT', database.close).on('SIGTERM', database.close);
-
-  return server;
-}
-
-function stop() {
-  return server.close();
-}
-
-module.exports = { start, stop };
+module.exports = app;
