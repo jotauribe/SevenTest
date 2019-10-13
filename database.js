@@ -16,6 +16,16 @@ function connect() {
   db.once('open', () => {
     console.log('> successfully opened the database');
   });
+
+  return db;
 }
 
-module.exports = { connect };
+function close() {
+  return mongoose.connection.close(function() {
+    console.log(
+      'Mongoose default connection is disconnected through app termination'
+    );
+  });
+}
+
+module.exports = { connect, close };
